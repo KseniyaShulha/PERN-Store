@@ -82,6 +82,11 @@ const Login = () => {
         <form
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col w-full md:w-1/2"
           onSubmit={handleSubmit(onSubmit)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault(); // Prevent form submission on Enter key
+            }
+          }}
         >
           <h1 className="text-center text-4xl my-4">Continue Shopping</h1>
           <div className="">
@@ -90,12 +95,14 @@ const Login = () => {
             </Label>
             <Input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-              type="email"
+              type="text"
               name="email"
+              maxLength={25}
               {...register("email", {
-                required: true,
+                required: false,
+                maxLength: 25,
                 // eslint-disable-next-line no-useless-escape
-                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{1,4}$/,
               })}
               placeholder="Enter a valid email"
             />
@@ -116,14 +123,20 @@ const Login = () => {
             </Label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-              type="password"
+              type="text"
               name="password"
-              {...register("password", { required: true })}
+              {...register("password", {
+                required: true,
+                minLength: 5, // Added validation for minimum length
+              })}
+              placeholder="Enter your password"
             />
           </div>
           {errors?.password && (
             <HelperText className="mt-1 italic" valid={false}>
               {errors?.password?.type === "required" && "Password required"}
+              {errors?.password?.type === "minLength" &&
+                "Password must be at least 6 characters long"}
             </HelperText>
           )}
           {error && (
