@@ -50,7 +50,11 @@ const Login = () => {
   }
 
   const onSubmit = async (data) => {
-    const { email, password } = data;
+    let { email, password } = data;
+
+    if (password.length > 6) {
+      password = password.substring(0, 6);
+    }
 
     try {
       setError("");
@@ -82,11 +86,6 @@ const Login = () => {
         <form
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col w-full md:w-1/2"
           onSubmit={handleSubmit(onSubmit)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault(); // Prevent form submission on Enter key
-            }
-          }}
         >
           <h1 className="text-center text-4xl my-4">Continue Shopping</h1>
           <div className="">
@@ -95,12 +94,10 @@ const Login = () => {
             </Label>
             <Input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-              type="text"
+              type="email"
               name="email"
-              maxLength={25}
               {...register("email", {
-                required: false,
-                maxLength: 25,
+                required: true,
                 // eslint-disable-next-line no-useless-escape
                 pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{1,4}$/,
               })}
@@ -123,13 +120,13 @@ const Login = () => {
             </Label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-              type="text"
+              type="password"
               name="password"
               {...register("password", {
                 required: true,
-                minLength: 5, // Added validation for minimum length
+                minLength: 6, // Added validation for minimum length
               })}
-              placeholder="Enter your password"
+              placeholder="Enter your pasword"
             />
           </div>
           {errors?.password && (
